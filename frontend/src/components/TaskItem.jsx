@@ -20,18 +20,23 @@ export default function TaskItem({ task, onEdit, onDelete, onStatusChange }) {
     isPast(parseISO(task.due_date)) &&
     !isToday(parseISO(task.due_date));
 
-  // TODO: Implement status cycling logic
-  // When the status badge is clicked, cycle to the next status.
-  // Consider: what % should be set for each transition?
-  // - not_started → in_progress: should % stay 0 or jump to something?
-  // - in_progress → completed: force 100%
-  // - completed → not_started: reset to 0%
   function handleStatusClick() {
     const nextStatus = STATUS_CYCLE[task.status];
-    let nextPercent = task.percent_complete;
+    let nextPercent;
 
-    // Your logic here — fill this in!
-    // onStatusChange(nextStatus, nextPercent);
+    if (nextStatus === "in_progress") {
+      // Keep existing % if already partially done, otherwise start at 10
+      nextPercent = task.percent_complete > 0 && task.percent_complete < 100
+        ? task.percent_complete
+        : 10;
+    } else if (nextStatus === "completed") {
+      nextPercent = 100;
+    } else {
+      // back to not_started
+      nextPercent = 0;
+    }
+
+    onStatusChange(nextStatus, nextPercent);
   }
 
   function handlePercentChange(e) {
