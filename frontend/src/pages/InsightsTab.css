@@ -1,0 +1,32 @@
+.insights-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.insights-placeholder {
+  text-align: center;
+  max-width: 420px;
+}
+
+.insights-icon { font-size: 3rem; display: block; margin-bottom: 16px; }
+
+.insights-placeholder h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.insights-placeholder p {
+  font-size: 0.93rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.insights-sub {
+  margin-top: 8px;
+  font-size: 0.85rem !important;
+  color: var(--text-light) !important;
+}

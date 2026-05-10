@@ -1,0 +1,122 @@
+.task-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-item:last-of-type { border-bottom: none; }
+
+.task-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  font-size: 0.73rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+
+.status-badge.not_started {
+  background: #F3F4F6;
+  color: var(--not-started);
+}
+
+.status-badge.not_started:hover {
+  background: #E5E7EB;
+}
+
+.status-badge.in_progress {
+  background: var(--in-progress-bg);
+  color: #92400E;
+}
+
+.status-badge.in_progress:hover {
+  background: #FDE68A;
+}
+
+.status-badge.completed {
+  background: var(--completed-bg);
+  color: #065F46;
+}
+
+.status-badge.completed:hover {
+  background: #A7F3D0;
+}
+
+.status-check { margin-right: 3px; }
+
+.task-title {
+  font-size: 0.9rem;
+  color: var(--text);
+  flex: 1;
+}
+
+.task-title.strikethrough {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.task-due {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.task-due.overdue {
+  color: var(--overdue);
+  font-weight: 500;
+}
+
+.task-item.overdue { background: #FFF9F9; margin: 0 -4px; padding: 12px 4px; border-radius: 6px; }
+
+/* Percent slider */
+.task-percent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 4px;
+}
+
+.percent-slider {
+  flex: 1;
+  height: 4px;
+  accent-color: var(--in-progress);
+  cursor: pointer;
+  max-width: 220px;
+}
+
+.percent-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #92400E;
+  min-width: 32px;
+}
+
+/* Actions */
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: absolute;
+  right: 20px;
+}
+
+.task-item { position: relative; }
