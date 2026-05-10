@@ -1,98 +1,83 @@
+/* Each task row matches the table header grid */
 .task-item {
-  padding: 12px 0;
+  display: grid;
+  grid-template-columns: 120px 1fr 90px 70px;
+  align-items: center;
+  padding: 10px 16px;
   border-bottom: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  transition: background 0.12s;
+  min-height: 48px;
+  position: relative;
 }
 
 .task-item:last-of-type { border-bottom: none; }
 
-.task-main {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+.task-item:nth-child(even) { background: #F8FCFF; }
+.task-item:hover { background: var(--primary-light); }
+.task-item.overdue { background: #FFF5F5; }
+.task-item.overdue:hover { background: #FEE2E2; }
 
+/* Status badge — col 1 */
 .status-badge {
-  font-size: 0.73rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  padding: 3px 9px;
+  padding: 4px 9px;
   border-radius: 20px;
   cursor: pointer;
   border: none;
   white-space: nowrap;
   transition: all 0.15s;
-  flex-shrink: 0;
+  width: fit-content;
   font-family: inherit;
 }
 
 .status-badge.not_started {
-  background: #F3F4F6;
+  background: var(--not-started-bg);
   color: var(--not-started);
 }
-
-.status-badge.not_started:hover {
-  background: #E5E7EB;
-}
+.status-badge.not_started:hover { background: #E2E8F0; }
 
 .status-badge.in_progress {
   background: var(--in-progress-bg);
-  color: #92400E;
+  color: #0369A1;
 }
-
-.status-badge.in_progress:hover {
-  background: #FDE68A;
-}
+.status-badge.in_progress:hover { background: #BAE6FD; }
 
 .status-badge.completed {
   background: var(--completed-bg);
-  color: #065F46;
+  color: #0C4A6E;
 }
-
-.status-badge.completed:hover {
-  background: #A7F3D0;
-}
+.status-badge.completed:hover { background: #7DD3FC; }
 
 .status-check { margin-right: 3px; }
 
+/* Title — col 2 */
+.task-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 8px;
+  min-width: 0;
+}
+
 .task-title {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text);
-  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .task-title.strikethrough {
   text-decoration: line-through;
-  color: var(--text-muted);
+  color: var(--text-light);
 }
 
-.task-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
-}
-
-.task-due {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.task-due.overdue {
-  color: var(--overdue);
-  font-weight: 500;
-}
-
-.task-item.overdue { background: #FFF9F9; margin: 0 -4px; padding: 12px 4px; border-radius: 6px; }
-
-/* Percent slider */
+/* Progress slider — inside title col when in_progress */
 .task-percent-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding-left: 4px;
+  gap: 8px;
 }
 
 .percent-slider {
@@ -100,23 +85,37 @@
   height: 4px;
   accent-color: var(--in-progress);
   cursor: pointer;
-  max-width: 220px;
+  max-width: 140px;
 }
 
 .percent-label {
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   font-weight: 600;
-  color: #92400E;
-  min-width: 32px;
+  color: var(--primary);
+  min-width: 30px;
 }
 
-/* Actions */
+/* Due date — col 3 */
+.task-meta {
+  display: flex;
+  justify-content: center;
+}
+
+.task-due {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.task-due.overdue {
+  color: var(--overdue);
+  font-weight: 600;
+}
+
+/* Actions — col 4 */
 .task-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
-  position: absolute;
-  right: 20px;
+  justify-content: flex-end;
+  gap: 2px;
 }
-
-.task-item { position: relative; }

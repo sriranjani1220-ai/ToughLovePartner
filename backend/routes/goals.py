@@ -51,8 +51,8 @@ def create_goal():
         .eq("user_id", request.user_id)
         .execute()
     )
-    if existing.count >= 3:
-        return jsonify({"error": "Maximum 3 goals allowed"}), 400
+    if existing.count >= 5:
+        return jsonify({"error": "Maximum 5 goals allowed"}), 400
 
     result = supabase.table("goals").insert({
         "user_id": request.user_id,

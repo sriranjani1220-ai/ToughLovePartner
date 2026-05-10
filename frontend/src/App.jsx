@@ -3,6 +3,7 @@ import { supabase } from "./supabaseClient";
 import LoginPage from "./pages/LoginPage";
 import TodoTab from "./pages/TodoTab";
 import InsightsTab from "./pages/InsightsTab";
+import { LogoB } from "./components/LogoShowcase";
 import "./App.css";
 
 export default function App() {
@@ -29,7 +30,7 @@ export default function App() {
       <header className="app-header">
         <div className="header-inner">
           <div className="header-brand">
-            <span className="brand-icon">💪</span>
+            <LogoB size={44} />
             <span className="brand-name">ToughLovePartner</span>
           </div>
           <div className="header-right">

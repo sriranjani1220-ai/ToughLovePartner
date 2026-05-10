@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-export default function AddGoalModal({ onSave, onClose }) {
-  const [title, setTitle] = useState("");
-  const [deadline, setDeadline] = useState("");
+export default function AddGoalModal({ onSave, onClose, initialTitle = "", initialDeadline = "", isEdit = false }) {
+  const [title, setTitle] = useState(initialTitle);
+  const [deadline, setDeadline] = useState(initialDeadline);
   const [saving, setSaving] = useState(false);
 
   async function handleSubmit(e) {
@@ -19,7 +19,7 @@ export default function AddGoalModal({ onSave, onClose }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>New Goal</h2>
+        <h2>{isEdit ? "Edit Goal" : "New Goal"}</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Goal title</label>
@@ -42,7 +42,7 @@ export default function AddGoalModal({ onSave, onClose }) {
           <div className="modal-actions">
             <button type="button" className="btn-cancel" onClick={onClose}>Cancel</button>
             <button type="submit" className="btn-primary" disabled={!title.trim() || saving}>
-              {saving ? "Saving..." : "Add Goal"}
+              {saving ? "Saving..." : isEdit ? "Save Changes" : "Save Goal"}
             </button>
           </div>
         </form>

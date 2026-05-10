@@ -14,16 +14,15 @@
 }
 
 .app-header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  background: var(--header-gradient);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 12px rgba(3,105,161,0.25);
 }
 
 .header-inner {
-  max-width: 860px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 16px 24px 0;
   display: flex;
@@ -42,7 +41,7 @@
 .brand-name {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--primary);
+  color: #FFFFFF;
   letter-spacing: -0.3px;
 }
 
@@ -54,51 +53,51 @@
 
 .user-email {
   font-size: 0.82rem;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.75);
 }
 
 .btn-signout {
   font-size: 0.82rem;
-  color: var(--text-muted);
-  padding: 4px 10px;
+  color: rgba(255,255,255,0.85);
+  padding: 5px 12px;
   border-radius: 6px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255,255,255,0.35);
   transition: all 0.15s;
 }
 
 .btn-signout:hover {
-  background: var(--bg);
-  color: var(--text);
+  background: rgba(255,255,255,0.15);
+  color: white;
 }
 
 .tab-nav {
-  max-width: 860px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
   gap: 0;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .tab-btn {
   padding: 10px 20px;
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.65);
   border-bottom: 2px solid transparent;
   transition: all 0.15s;
 }
 
-.tab-btn:hover { color: var(--text); }
+.tab-btn:hover { color: rgba(255,255,255,0.9); }
 
 .tab-btn.active {
-  color: var(--primary);
-  border-bottom-color: var(--primary);
+  color: #FFFFFF;
+  border-bottom-color: rgba(255,255,255,0.9);
 }
 
 .app-main {
   flex: 1;
-  max-width: 860px;
+  max-width: 900px;
   width: 100%;
   margin: 0 auto;
   padding: 28px 24px;
@@ -108,12 +107,13 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(12,74,110,0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 200;
   padding: 20px;
+  backdrop-filter: blur(2px);
 }
 
 .modal {
@@ -123,13 +123,14 @@
   width: 100%;
   max-width: 460px;
   box-shadow: var(--shadow-md);
+  border-top: 4px solid var(--primary);
 }
 
 .modal h2 {
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 20px;
-  color: var(--text);
+  color: var(--primary-dark);
 }
 
 .form-group {
@@ -138,19 +139,19 @@
 
 .form-group label {
   display: block;
-  font-size: 0.82rem;
-  font-weight: 500;
+  font-size: 0.78rem;
+  font-weight: 600;
   color: var(--text-muted);
   margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.5px;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 0.93rem;
   color: var(--text);
@@ -176,7 +177,7 @@
   padding: 9px 18px;
   font-size: 0.88rem;
   color: var(--text-muted);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   transition: all 0.15s;
 }
@@ -196,6 +197,6 @@
 .btn-primary:hover { background: var(--primary-dark); }
 
 .btn-primary:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }

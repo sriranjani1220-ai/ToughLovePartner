@@ -20,13 +20,20 @@ def create_task():
         return jsonify({"error": "Forbidden"}), 403
 
     due_date = data.get("due_date")
+    status = data.get("status", "not_started")
+    percent = data.get("percent_complete", 0)
+    completed_at = data.get("completed_at")
+    started_at = data.get("started_at")
+
     result = supabase.table("tasks").insert({
         "goal_id": goal_id,
         "title": data["title"],
         "due_date": due_date,
         "original_due_date": due_date,
-        "status": "not_started",
-        "percent_complete": 0,
+        "status": status,
+        "percent_complete": percent,
+        "completed_at": completed_at,
+        "started_at": started_at,
     }).execute()
     return jsonify(result.data[0]), 201
 
@@ -70,7 +77,7 @@ def update_task(task_id):
         update_data["started_at"] = None
         update_data["completed_at"] = None
 
-    result = supabase.table("tasks").update(update_data).eq("id", task_id).execute()
+    result = supabase.table("tasks").update(update_data).eq("id", task_id).select("*").execute()
     return jsonify(result.data[0])
 
 

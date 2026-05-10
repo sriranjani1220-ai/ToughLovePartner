@@ -15,6 +15,7 @@ export default function TodoTab() {
   const [addTaskGoalId, setAddTaskGoalId] = useState(null);
   const [editingTask, setEditingTask] = useState(null);
   const [notifEnabled, setNotifEnabled] = useState(false);
+  const [taskFilter, setTaskFilter] = useState("active");
 
   useEffect(() => {
     loadGoals();
@@ -59,17 +60,34 @@ export default function TodoTab() {
   }
 
   async function handleUpdateTask(taskId, goalId, payload) {
-    const updated = await updateTask(taskId, payload);
+    // Apply payload immediately to local state (optimistic) so filter responds instantly
     setGoals((prev) =>
       prev.map((g) =>
         g.id === goalId
           ? refreshGoalStats({
               ...g,
-              tasks: g.tasks.map((t) => (t.id === taskId ? { ...t, ...updated } : t)),
+              tasks: g.tasks.map((t) => (t.id === taskId ? { ...t, ...payload } : t)),
             })
           : g
       )
     );
+    try {
+      const updated = await updateTask(taskId, payload);
+      // Merge server response (has server-generated fields like completed_at)
+      setGoals((prev) =>
+        prev.map((g) =>
+          g.id === goalId
+            ? refreshGoalStats({
+                ...g,
+                tasks: g.tasks.map((t) => (t.id === taskId ? { ...t, ...payload, ...(updated || {}) } : t)),
+              })
+            : g
+        )
+      );
+    } catch {
+      // Revert on failure by reloading from server
+      loadGoals();
+    }
     setEditingTask(null);
   }
 
@@ -124,11 +142,14 @@ export default function TodoTab() {
               🔔 Enable reminders
             </button>
           )}
-          {goals.length < 3 && (
-            <button className="btn-add-goal" onClick={() => setShowAddGoal(true)}>
-              + Add Goal
-            </button>
-          )}
+          <button
+            className="btn-add-goal"
+            onClick={() => setShowAddGoal(true)}
+            disabled={goals.length >= 5}
+            title={goals.length >= 5 ? "Maximum 5 goals reached" : ""}
+          >
+            {goals.length >= 5 ? "Max 5 Goals Reached" : "+ Add Goal"}
+          </button>
         </div>
       </div>
 
@@ -137,24 +158,41 @@ export default function TodoTab() {
           <p className="empty-icon">🎯</p>
           <p className="empty-text">No goals yet. Add your first goal to get started.</p>
           <button className="btn-add-goal" onClick={() => setShowAddGoal(true)}>
-            + Add Goal
+            + Add your first Goal
           </button>
         </div>
       ) : (
-        <div className="goals-list">
-          {goals.map((goal) => (
-            <GoalCard
-              key={goal.id}
-              goal={goal}
-              onUpdateGoal={handleUpdateGoal}
-              onDeleteGoal={handleDeleteGoal}
-              onAddTask={(goalId) => setAddTaskGoalId(goalId)}
-              onEditTask={(task) => setEditingTask(task)}
-              onDeleteTask={handleDeleteTask}
-              onUpdateTask={handleUpdateTask}
-            />
-          ))}
-        </div>
+        <>
+          <div className="task-filter-bar">
+            <button
+              className={`filter-btn ${taskFilter === "active" ? "active" : ""}`}
+              onClick={() => setTaskFilter("active")}
+            >
+              Active Tasks
+            </button>
+            <button
+              className={`filter-btn ${taskFilter === "completed" ? "active" : ""}`}
+              onClick={() => setTaskFilter("completed")}
+            >
+              Completed Tasks
+            </button>
+          </div>
+          <div className="goals-list">
+            {goals.map((goal) => (
+              <GoalCard
+                key={goal.id}
+                goal={goal}
+                taskFilter={taskFilter}
+                onUpdateGoal={handleUpdateGoal}
+                onDeleteGoal={handleDeleteGoal}
+                onAddTask={(goalId) => setAddTaskGoalId(goalId)}
+                onEditTask={(task) => setEditingTask(task)}
+                onDeleteTask={handleDeleteTask}
+                onUpdateTask={handleUpdateTask}
+              />
+            ))}
+          </div>
+        </>
       )}
 
       {showAddGoal && (

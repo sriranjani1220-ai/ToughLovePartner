@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { format, isPast, parseISO } from "date-fns";
 import TaskItem from "./TaskItem";
+import AddGoalModal from "./AddGoalModal";
 import "./GoalCard.css";
 
-export default function GoalCard({ goal, onUpdateGoal, onDeleteGoal, onAddTask, onEditTask, onDeleteTask, onUpdateTask }) {
+export default function GoalCard({ goal, taskFilter = "active", onUpdateGoal, onDeleteGoal, onAddTask, onEditTask, onDeleteTask, onUpdateTask }) {
   const [expanded, setExpanded] = useState(true);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [editingGoal, setEditingGoal] = useState(false);
 
   const tasks = goal.tasks || [];
+  const visibleTasks = taskFilter === "completed"
+    ? tasks.filter((t) => t.status === "completed")
+    : tasks.filter((t) => t.status !== "completed");
   const isDeadlinePast = goal.deadline && isPast(parseISO(goal.deadline));
 
   return (
@@ -45,6 +50,13 @@ export default function GoalCard({ goal, onUpdateGoal, onDeleteGoal, onAddTask, 
           </div>
 
           <div className="goal-actions">
+            <button
+              className="btn-icon"
+              onClick={() => setEditingGoal(true)}
+              title="Edit goal"
+            >
+              ✎
+            </button>
             {!confirmDelete ? (
               <button
                 className="btn-icon danger"
@@ -75,28 +87,56 @@ export default function GoalCard({ goal, onUpdateGoal, onDeleteGoal, onAddTask, 
       {/* Tasks */}
       {expanded && (
         <div className="goal-tasks">
-          {tasks.length === 0 ? (
-            <p className="no-tasks">No tasks yet. Add one below.</p>
+          {visibleTasks.length === 0 ? (
+            <p className="no-tasks">
+              {taskFilter === "completed"
+                ? "No completed tasks yet for this goal."
+                : "No active tasks. Add one below."}
+            </p>
           ) : (
-            tasks.map((task) => (
-              <TaskItem
-                key={task.id}
-                task={task}
-                onEdit={() => onEditTask(task)}
-                onDelete={() => onDeleteTask(task.id, goal.id)}
-                onStatusChange={(status, percent) =>
-                  onUpdateTask(task.id, goal.id, { status, percent_complete: percent })
-                }
-              />
-            ))
+            <>
+              <div className="task-table-header">
+                <span>Status</span>
+                <span style={{ paddingLeft: "8px" }}>Task</span>
+                <span style={{ textAlign: "center" }}>
+                  {taskFilter === "completed" ? "Completed On" : "Due Date"}
+                </span>
+                <span style={{ textAlign: "right" }}>Actions</span>
+              </div>
+              <div className="task-table-body">
+                {visibleTasks.map((task) => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    showCompletedDate={taskFilter === "completed"}
+                    onEdit={() => onEditTask(task)}
+                    onDelete={() => onDeleteTask(task.id, goal.id)}
+                    onStatusChange={(status, percent) =>
+                      onUpdateTask(task.id, goal.id, { status, percent_complete: percent })
+                    }
+                  />
+                ))}
+              </div>
+            </>
           )}
-          <button
-            className="btn-add-task"
-            onClick={() => onAddTask(goal.id)}
-          >
-            + Add task
-          </button>
+          {taskFilter !== "completed" && (
+            <button className="btn-add-task" onClick={() => onAddTask(goal.id)}>
+              + Add task
+            </button>
+          )}
         </div>
+      )}
+      {editingGoal && (
+        <AddGoalModal
+          isEdit
+          initialTitle={goal.title}
+          initialDeadline={goal.deadline ? goal.deadline.split("T")[0] : ""}
+          onSave={async (payload) => {
+            await onUpdateGoal(goal.id, payload);
+            setEditingGoal(false);
+          }}
+          onClose={() => setEditingGoal(false)}
+        />
       )}
     </div>
   );

@@ -1,7 +1,6 @@
-import os
-import jwt
 from functools import wraps
 from flask import request, jsonify
+from supabase_client import supabase
 
 
 def require_auth(f):
@@ -12,16 +11,10 @@ def require_auth(f):
         if not token:
             return jsonify({"error": "Unauthorized"}), 401
         try:
-            payload = jwt.decode(
-                token,
-                os.getenv("SUPABASE_JWT_SECRET"),
-                algorithms=["HS256"],
-                audience="authenticated",
-            )
-            request.user_id = payload["sub"]
-        except jwt.ExpiredSignatureError:
-            return jsonify({"error": "Token expired"}), 401
-        except Exception:
+            user = supabase.auth.get_user(token)
+            request.user_id = user.user.id
+        except Exception as e:
+            print(f"[AUTH ERROR] {type(e).__name__}: {e}")
             return jsonify({"error": "Invalid token"}), 401
         return f(*args, **kwargs)
     return decorated

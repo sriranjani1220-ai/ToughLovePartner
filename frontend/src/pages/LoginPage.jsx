@@ -1,4 +1,5 @@
 import { supabase } from "../supabaseClient";
+import { LogoB } from "../components/LogoShowcase";
 import "./LoginPage.css";
 
 export default function LoginPage() {
@@ -12,7 +13,9 @@ export default function LoginPage() {
   return (
     <div className="login-page">
       <div className="login-card">
-        <div className="login-icon">💪</div>
+        <div className="login-icon">
+          <LogoB size={160} />
+        </div>
         <h1 className="login-title">ToughLovePartner</h1>
         <p className="login-subtitle">
           Your accountability partner that pushes you to finish what you start.
